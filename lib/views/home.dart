@@ -1,10 +1,12 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:tugas16_flutter/model/user_model.dart';
 import 'package:tugas16_flutter/services/api_service.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
-  static const String id = "/Home";
+  static const String id = "/home";
+
   @override
   State<Home> createState() => _HomeState();
 }
@@ -12,8 +14,15 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   GetUserModel? userData;
   bool isLoading = true;
-  final TextEditingController _nameController = TextEditingController();
-  final int _selectedIndex = 0;
+
+  int _current = 0;
+
+  final List<String> imgList = [
+    'assets/images/carmen.jpg',
+    'assets/images/carmen.jpg',
+    'assets/images/carmen.jpg',
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -21,22 +30,17 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> loadUserData() async {
-    setState(() {
-      isLoading = true;
-    });
+    setState(() => isLoading = true);
 
     try {
       final data = await AuthenticationAPI.getProfile();
       setState(() {
         userData = data;
-        _nameController.text = userData?.data?.name ?? '';
       });
     } catch (e) {
-      print("Error load user: $e");
+      debugPrint("Error load user: $e");
     } finally {
-      setState(() {
-        isLoading = false;
-      });
+      setState(() => isLoading = false);
     }
   }
 
@@ -44,113 +48,95 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
-              child: Row(
-                children: [
-                  CircleAvatar(backgroundColor: Colors.grey),
-                  SizedBox(width: 10),
-                  Text(
-                    "hi, ${userData?.data?.name ?? ''}",
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              height: 210,
-              width: 450,
-              decoration: const BoxDecoration(
-                color: Color(0xFF0C1C3C),
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(30),
-                  bottomRight: Radius.circular(30),
+        child: SingleChildScrollView(
+          // biar bisa scroll semua isi
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              /// Header User
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 25,
+                  vertical: 20,
+                ),
+                child: Row(
+                  children: [
+                    const CircleAvatar(backgroundColor: Colors.grey),
+                    const SizedBox(width: 10),
+                    Text(
+                      "Hi, ${userData?.data?.name ?? ''}",
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 27,
+
+              /// Carousel
+              CarouselSlider(
+                options: CarouselOptions(
+                  height: 200,
+                  autoPlay: true,
+                  enlargeCenterPage: true,
+                  viewportFraction: 0.9,
+                  aspectRatio: 16 / 9,
+                  onPageChanged: (index, reason) {
+                    setState(() {
+                      _current = index;
+                    });
+                  },
+                ),
+                items: imgList.map((item) {
+                  return ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.asset(
+                      item,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text(
-                          "Pilihan Lapangan!",
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Icon(
-                          Icons.notifications_none,
-                          color: Colors.white,
-                          size: 30,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(
-                            horizontal: 17,
-                            vertical: 1,
-                          ),
-                          height: 60,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF1C2C4C),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: const TextField(
-                            decoration: InputDecoration(
-                              hintText: "Cari Lapangan di Jakarta",
-                              hintStyle: TextStyle(color: Colors.grey),
-                              border: InputBorder.none,
-                              icon: Padding(
-                                padding: EdgeInsets.all(20),
-                                child: Icon(Icons.search, color: Colors.white),
-                              ),
-                            ),
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                  );
+                }).toList(),
               ),
-            ),
-          ],
+
+              const SizedBox(height: 10),
+
+              // Custom Indicator
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: imgList.asMap().entries.map((entry) {
+                  return Container(
+                    width: 8,
+                    height: 8,
+                    margin: const EdgeInsets.symmetric(
+                      vertical: 8.0,
+                      horizontal: 4.0,
+                    ),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: _current == entry.key
+                          ? Colors.blueAccent
+                          : Colors.grey,
+                    ),
+                  );
+                }).toList(),
+              ),
+
+              const Padding(
+                padding: EdgeInsets.all(16),
+                child: Text(
+                  "Menu",
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                ),
+              ),
+
+              /// Panggil MenuPage disini
+              // const MenuPage(),
+            ],
+          ),
         ),
       ),
-
-      // body: Padding(
-      //   padding: EdgeInsets.all(16),
-      //   child: Column(children: [Container(height: 150, color: Colors.blue)]),
-      // ),
-
-      // bottomNavigationBar: BottomNavigationBar(
-      //   backgroundColor: Colors.grey[50],
-      //   currentIndex: _selectedIndex,
-      //   selectedItemColor: const Color(0xFF1A2A80),
-      //   unselectedItemColor: Colors.grey,
-      //   onTap: (index) => setState(() => _selectedIndex = index),
-      //   items: const [
-      //     BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-      //     BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Home'),
-      //     BottomNavigationBarItem(icon: Icon(Icons.info), label: 'Tentang'),
-      //   ],
-      // ),
     );
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tugas16_flutter/auth/splash_screen.dart';
-import 'package:tugas16_flutter/views/home.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,13 +16,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      initialRoute: '/',
-      routes: {
-        '/splash_screen': (context) => const SplashScreen(),
-        '/Home': (context) => const Home(),
-        // '/ButtonNavbar': (context) => const ButtonNavbar(),
-      },
-      // home: LoginFutsal(),
+
+      // initialRoute: '/',
+      // routes: {
+      //   '/splash_screen': (context) => const SplashScreen(),
+      //   '/Home': (context) => const Home(),
+      //   // '/ButtonNavbar': (context) => const ButtonNavbar(),
+      // },
       home: SplashScreen(),
     );
   }

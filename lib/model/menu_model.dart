@@ -1,25 +1,32 @@
+// To parse this JSON data, do
+//
+//     final menuModel = menuModelFromJson(jsonString);
+
+import 'dart:convert';
+
+MenuModel menuModelFromJson(String str) => MenuModel.fromJson(json.decode(str));
+
+String menuModelToJson(MenuModel data) => json.encode(data.toJson());
+
 class MenuModel {
-  final int id;
-  final String name;
-  final String description;
-  final String price;
-  final String? imageUrl;
+  String? name;
+  String? description;
+  int? price;
+  String? image;
 
-  MenuModel({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.price,
-    this.imageUrl,
-  });
+  MenuModel({this.name, this.description, this.price, this.image});
 
-  factory MenuModel.fromJson(Map<String, dynamic> json) {
-    return MenuModel(
-      id: json['id'],
-      name: json['name'],
-      description: json['description'],
-      price: json['price'].toString(),
-      imageUrl: json['image_url'],
-    );
-  }
+  factory MenuModel.fromJson(Map<String, dynamic> json) => MenuModel(
+    name: json["name"],
+    description: json["description"],
+    price: json["price"],
+    image: json["image"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "name": name,
+    "description": description,
+    "price": price,
+    "image": image,
+  };
 }

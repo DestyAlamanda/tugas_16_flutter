@@ -1,24 +1,34 @@
+// To parse this JSON data, do
+//
+//     final reservationModel = reservationModelFromJson(jsonString);
+
+import 'dart:convert';
+
+ReservationModel reservationModelFromJson(String str) =>
+    ReservationModel.fromJson(json.decode(str));
+
+String reservationModelToJson(ReservationModel data) =>
+    json.encode(data.toJson());
+
 class ReservationModel {
-  final int id;
-  final String reservedAt;
-  final int guestCount;
-  final String notes;
+  DateTime? reservedAt;
+  int? guestCount;
+  String? notes;
 
-  ReservationModel({
-    required this.id,
-    required this.reservedAt,
-    required this.guestCount,
-    required this.notes,
-  });
+  ReservationModel({this.reservedAt, this.guestCount, this.notes});
 
-  factory ReservationModel.fromJson(Map<String, dynamic> json) {
-    return ReservationModel(
-      id: json['id'] is int ? json['id'] : int.parse(json['id'].toString()),
-      reservedAt: json['reserved_at'].toString(),
-      guestCount: json['guest_count'] is int
-          ? json['guest_count']
-          : int.parse(json['guest_count'].toString()),
-      notes: json['notes']?.toString() ?? "-",
-    );
-  }
+  factory ReservationModel.fromJson(Map<String, dynamic> json) =>
+      ReservationModel(
+        reservedAt: json["reserved_at"] == null
+            ? null
+            : DateTime.parse(json["reserved_at"]),
+        guestCount: json["guest_count"],
+        notes: json["notes"],
+      );
+
+  Map<String, dynamic> toJson() => {
+    "reserved_at": reservedAt?.toIso8601String(),
+    "guest_count": guestCount,
+    "notes": notes,
+  };
 }

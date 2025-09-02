@@ -1,7 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:tugas16_flutter/api/api_service.dart';
 import 'package:tugas16_flutter/model/user_model.dart';
-import 'package:tugas16_flutter/services/api_service.dart';
+import 'package:tugas16_flutter/views/menu_page.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -132,7 +133,7 @@ class _HomeState extends State<Home> {
               ),
 
               /// Panggil MenuPage disini
-              // const MenuPage(),
+              const MenuPage(),
             ],
           ),
         ),

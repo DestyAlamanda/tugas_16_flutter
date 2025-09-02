@@ -2,11 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:tugas16_flutter/api/endpoint/endpoint.dart';
 import 'package:tugas16_flutter/model/menu_model.dart';
 import 'package:tugas16_flutter/model/register_model.dart';
 import 'package:tugas16_flutter/model/user_model.dart';
 import 'package:tugas16_flutter/preference/shared_preference.dart';
-import 'package:tugas16_flutter/services/endpoint/endpoint.dart';
 
 class AuthenticationAPI {
   // register user
@@ -99,7 +99,7 @@ class AuthenticationAPI {
 
   // get menus
   static Future<List<MenuModel>> getMenus() async {
-    final url = Uri.parse(Endpoint.menu);
+    final url = Uri.parse(Endpoint.menus);
     final token = await PreferenceHandler.getToken();
 
     if (token == null) {
@@ -131,7 +131,7 @@ class AuthenticationAPI {
     String price,
     File? image,
   ) async {
-    final url = Uri.parse(Endpoint.menu);
+    final url = Uri.parse(Endpoint.menus);
     final token = await PreferenceHandler.getToken();
 
     if (token == null) {

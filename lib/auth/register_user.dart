@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:tugas16_flutter/api/api_service.dart';
 import 'package:tugas16_flutter/model/register_model.dart';
 import 'package:tugas16_flutter/preference/shared_preference.dart';
-import 'package:tugas16_flutter/services/api_service.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -19,25 +19,31 @@ class _RegisterPageState extends State<RegisterPage> {
 
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
-  bool _isLoading = false;
+  bool isLoading = false;
 
   final _formKey = GlobalKey<FormState>();
 
   RegisterUserModel? user;
   String? errorMessage;
 
-  Future<void> registerUser() async {
-    if (!_formKey.currentState!.validate()) return;
-
-    final name = nameController.text.trim();
-    final email = emailController.text.trim();
-    final password = passwordController.text.trim();
-
+  void registerUser() async {
     setState(() {
-      _isLoading = true;
+      isLoading = true;
       errorMessage = null;
     });
+    final email = emailController.text.trim();
+    final password = passwordController.text.trim();
+    final name = nameController.text.trim();
+    if (email.isEmpty || password.isEmpty || name.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Email, Password, dan Nama tidak boleh kosong"),
+        ),
+      );
+      isLoading = false;
 
+      return;
+    }
     try {
       final result = await AuthenticationAPI.registerUser(
         email: email,
@@ -47,27 +53,31 @@ class _RegisterPageState extends State<RegisterPage> {
       setState(() {
         user = result;
       });
-
-      // Simpan token
-      PreferenceHandler.saveToken(user?.data?.token ?? "");
-
-      // Tampilkan pesan berhasil
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text("Pendaftaran berhasil")));
-
-      // Kembali ke LoginScreen
-      Navigator.pop(context);
+      PreferenceHandler.saveToken(user?.data?.token.toString() ?? "");
+      print(user?.toJson());
     } catch (e) {
-      errorMessage = e.toString();
+      print(e);
+      setState(() {
+        errorMessage = e.toString();
+      });
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text(errorMessage!)));
+      ).showSnackBar(SnackBar(content: Text(errorMessage.toString())));
     } finally {
-      setState(() {
-        _isLoading = false;
-      });
+      setState(() {});
+      isLoading = false;
     }
+    // final user = User(email: email, password: password, name: name);
+    // await DbHelper.registerUser(user);
+    // Future.delayed(const Duration(seconds: 1)).then((value) {
+    //   isLoading = false;
+    //   ScaffoldMessenger.of(
+    //     context,
+    //   ).showSnackBar(const SnackBar(content: Text("Pendaftaran berhasil")));
+    // });
   }
 
   @override
@@ -247,14 +257,16 @@ class _RegisterPageState extends State<RegisterPage> {
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: _isLoading ? null : registerUser,
+                    onPressed: () {
+                      registerUser();
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF1A2A80),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(6),
                       ),
                     ),
-                    child: _isLoading
+                    child: isLoading
                         ? const CircularProgressIndicator(color: Colors.white)
                         : const Text(
                             "Daftar",

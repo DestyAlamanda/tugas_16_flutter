@@ -19,7 +19,9 @@ class MenuModel {
   factory MenuModel.fromJson(Map<String, dynamic> json) => MenuModel(
     name: json["name"],
     description: json["description"],
-    price: json["price"],
+    price: json["price"] != null
+        ? int.tryParse(json["price"].toString())
+        : null,
     image: json["image"],
   );
 

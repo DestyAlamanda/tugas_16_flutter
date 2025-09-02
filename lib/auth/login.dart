@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:tugas16_flutter/api/api_service.dart';
 import 'package:tugas16_flutter/auth/register_user.dart';
 import 'package:tugas16_flutter/model/register_model.dart';
 import 'package:tugas16_flutter/preference/shared_preference.dart';
-import 'package:tugas16_flutter/services/api_service.dart';
 import 'package:tugas16_flutter/views/home.dart';
 // pastikan ada file ini
 
@@ -177,7 +177,9 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: isLoading ? null : loginUser,
+                  onPressed: () {
+                    loginUser();
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF1A2A80),
                     shape: RoundedRectangleBorder(

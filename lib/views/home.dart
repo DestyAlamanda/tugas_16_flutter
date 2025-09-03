@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:tugas16_flutter/api/api_service.dart';
+import 'package:tugas16_flutter/model/menu_model.dart';
 import 'package:tugas16_flutter/model/user_model.dart';
 import 'package:tugas16_flutter/views/menu_page.dart';
 
@@ -13,6 +14,10 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  late Future<List<MenuModel>> futureMenus;
+  List<MenuModel> allMenus = [];
+  List<MenuModel> filteredMenus = [];
+  final TextEditingController searchCtrl = TextEditingController();
   GetUserModel? userData;
   bool isLoading = true;
 
@@ -28,6 +33,17 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     loadUserData();
+    loadMenus();
+  }
+
+  void loadMenus() {
+    setState(() {
+      futureMenus = AuthenticationAPI.getMenus().then((menus) {
+        allMenus = menus;
+        filteredMenus = menus;
+        return menus;
+      });
+    });
   }
 
   Future<void> loadUserData() async {
@@ -42,6 +58,24 @@ class _HomeState extends State<Home> {
       debugPrint("Error load user: $e");
     } finally {
       setState(() => isLoading = false);
+    }
+  }
+
+  void filterMenus(String keyword) {
+    if (keyword.isEmpty) {
+      setState(() => filteredMenus = allMenus);
+    } else {
+      setState(() {
+        filteredMenus = allMenus
+            .where(
+              (menu) =>
+                  menu.name.toLowerCase().contains(keyword.toLowerCase()) ||
+                  menu.description.toLowerCase().contains(
+                    keyword.toLowerCase(),
+                  ),
+            )
+            .toList();
+      });
     }
   }
 
@@ -74,6 +108,28 @@ class _HomeState extends State<Home> {
                   ],
                 ),
               ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: TextField(
+                  controller: searchCtrl,
+                  onChanged: filterMenus,
+                  decoration: InputDecoration(
+                    hintText: "Cari menu favoritmu...",
+                    prefixIcon: const Icon(Icons.search, color: Colors.orange),
+                    filled: true,
+                    fillColor: Colors.white,
+                    contentPadding: const EdgeInsets.symmetric(
+                      vertical: 0,
+                      horizontal: 16,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
 
               /// Carousel
               CarouselSlider(

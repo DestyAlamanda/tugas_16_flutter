@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:tugas16_flutter/model/menu_model.dart';
 
 class DetailMenu extends StatefulWidget {
-  const DetailMenu({super.key});
+  final MenuModel menu;
+  const DetailMenu({super.key, required this.menu});
 
   @override
   State<DetailMenu> createState() => _DetailMenuState();

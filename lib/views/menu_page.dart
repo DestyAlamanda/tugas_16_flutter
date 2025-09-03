@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:tugas16_flutter/api/api_service.dart';
 import 'package:tugas16_flutter/model/menu_model.dart';
+import 'package:tugas16_flutter/views/detail_menu.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
+
   static const String id = "/menu";
 
   @override
@@ -12,6 +14,9 @@ class MenuPage extends StatefulWidget {
 
 class _MenuPageState extends State<MenuPage> {
   late Future<List<MenuModel>> futureMenus;
+  List<MenuModel> allMenus = [];
+  List<MenuModel> filteredMenus = [];
+  // final TextEditingController searchCtrl = TextEditingController();
 
   @override
   void initState() {
@@ -21,10 +26,31 @@ class _MenuPageState extends State<MenuPage> {
 
   void loadMenus() {
     setState(() {
-      futureMenus = AuthenticationAPI.getMenus();
+      futureMenus = AuthenticationAPI.getMenus().then((menus) {
+        allMenus = menus;
+        filteredMenus = menus;
+        return menus;
+      });
     });
   }
 
+  // void filterMenus(String keyword) {
+  //     if (keyword.isEmpty) {
+  //       setState(() => filteredMenus = allMenus);
+  //     } else {
+  //       setState(() {
+  //         filteredMenus = allMenus
+  //             .where(
+  //               (menu) =>
+  //                   menu.name.toLowerCase().contains(keyword.toLowerCase()) ||
+  //                   menu.description.toLowerCase().contains(
+  //                     keyword.toLowerCase(),
+  //                   ),
+  //             )
+  //             .toList();
+  //       });
+  //     }
+  //   }
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<MenuModel>>(
@@ -48,126 +74,101 @@ class _MenuPageState extends State<MenuPage> {
           padding: const EdgeInsets.all(16),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            crossAxisSpacing: 20,
-            mainAxisSpacing: 20,
-            childAspectRatio: 0.7,
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
+            childAspectRatio: 0.75,
           ),
-          itemCount: menus.length,
+          itemCount: filteredMenus.length,
           itemBuilder: (context, index) {
-            final menu = menus[index];
-
+            final menu = filteredMenus[index];
+            print("DEBUG IMAGE URL: ${menu.imageUrl}");
             return GestureDetector(
-              onTap: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (_) => DetailMenu(menu: menus)),
-                // );
+              onTap: () async {
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => DetailMenu(menu: menu)),
+                );
+                if (result == true) loadMenus();
               },
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Stack(
-                  children: [
-                    // Gambar menu atau ikon default
-                    Positioned.fill(
-                      child: menu.image != null && menu.image!.isNotEmpty
-                          ? Image.network(
-                              menu.image!,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Container(
-                                  color: Colors.grey.shade800,
-                                  child: const Icon(
-                                    Icons.broken_image,
-                                    color: Colors.white70,
-                                    size: 50,
-                                  ),
-                                );
-                              },
-                            )
-                          : Container(
-                              color: Colors.indigo[100],
-                              child: const Icon(
-                                Icons.restaurant,
-                                size: 50,
-                                color: Colors.indigo,
-                              ),
+              child: Stack(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 4,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: ClipRRect(
+                            borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(12),
                             ),
-                    ),
-                    // Label rating
-                    Positioned(
-                      top: 8,
-                      left: 8,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 6,
-                          vertical: 4,
+                            child:
+                                (menu.imageUrl != null &&
+                                    menu.imageUrl!.isNotEmpty)
+                                ? Image.network(
+                                    menu.imageUrl!,
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                  )
+                                : const Icon(
+                                    Icons.fastfood,
+                                    size: 64,
+                                    color: Colors.orange,
+                                  ),
+                          ),
                         ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(18),
-                        ),
-                        child: const Text("⭐⭐"),
-                      ),
-                    ),
-                    // Nama menu dan harga
-                    Positioned(
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      child: Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Colors.transparent,
-                              Colors.black.withOpacity(0.7),
+                        Padding(
+                          padding: const EdgeInsets.all(9.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                menu.name,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                "Rp ${menu.price}",
+                                style: TextStyle(color: Colors.orange[800]),
+                              ),
                             ],
                           ),
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              menu.name ?? "Tanpa nama",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                color: Colors.white,
-                                shadows: [
-                                  Shadow(
-                                    blurRadius: 4,
-                                    color: Colors.black,
-                                    offset: Offset(1, 1),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 2),
-                            Text(
-                              "Rp${menu.price ?? 0}",
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: Colors.white,
-                                shadows: [
-                                  Shadow(
-                                    blurRadius: 4,
-                                    color: Colors.black,
-                                    offset: Offset(1, 1),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+
+                  // Label rating
+                  Positioned(
+                    top: 15,
+                    left: 15,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(13),
+                      ),
+                      child: const Text("⭐ 9.6"),
+                    ),
+                  ),
+                ],
               ),
             );
           },

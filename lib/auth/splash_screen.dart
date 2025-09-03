@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tugas16_flutter/auth/login.dart';
 import 'package:tugas16_flutter/preference/shared_preference.dart';
-import 'package:tugas16_flutter/views/home.dart';
+import 'package:tugas16_flutter/views/button_navbar.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -26,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if (isLogin == true) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => const Home()),
+          MaterialPageRoute(builder: (_) => const ButtomNavbar()),
         );
       } else {
         Navigator.pushReplacement(

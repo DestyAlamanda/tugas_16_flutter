@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tugas16_flutter/api/api_service.dart';
 import 'package:tugas16_flutter/model/menu_model.dart';
 import 'package:tugas16_flutter/model/user_model.dart';
+import 'package:tugas16_flutter/views/add_menu.dart';
 import 'package:tugas16_flutter/views/menu_page.dart';
 
 class Home extends StatefulWidget {
@@ -17,7 +18,7 @@ class _HomeState extends State<Home> {
   late Future<List<MenuModel>> futureMenus;
   List<MenuModel> allMenus = [];
   List<MenuModel> filteredMenus = [];
-  final TextEditingController searchCtrl = TextEditingController();
+  final TextEditingController searchController = TextEditingController();
   GetUserModel? userData;
   bool isLoading = true;
 
@@ -82,9 +83,20 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[100],
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.orange,
+        onPressed: () async {
+          final result = await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => AddMenu()),
+          );
+          if (result == true) loadMenus();
+        },
+        child: const Icon(Icons.add, color: Colors.white),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
-          // biar bisa scroll semua isi
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -108,13 +120,15 @@ class _HomeState extends State<Home> {
                   ],
                 ),
               ),
+
+              /// Search Bar
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: TextField(
-                  controller: searchCtrl,
+                  controller: searchController,
                   onChanged: filterMenus,
                   decoration: InputDecoration(
-                    hintText: "Cari menu favoritmu...",
+                    hintText: "Cari menu...",
                     prefixIcon: const Icon(Icons.search, color: Colors.orange),
                     filled: true,
                     fillColor: Colors.white,
@@ -188,8 +202,8 @@ class _HomeState extends State<Home> {
                 ),
               ),
 
-              /// Panggil MenuPage disini
-              const MenuPage(),
+              /// Panggil MenuPage
+              MenuPage(menus: filteredMenus),
             ],
           ),
         ),

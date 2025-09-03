@@ -3,7 +3,7 @@ import 'package:tugas16_flutter/api/api_service.dart';
 import 'package:tugas16_flutter/auth/register_user.dart';
 import 'package:tugas16_flutter/model/register_model.dart';
 import 'package:tugas16_flutter/preference/shared_preference.dart';
-import 'package:tugas16_flutter/views/home.dart';
+import 'package:tugas16_flutter/views/button_navbar.dart';
 // pastikan ada file ini
 
 class LoginScreen extends StatefulWidget {
@@ -64,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const Home()),
+        MaterialPageRoute(builder: (context) => const ButtomNavbar()),
       );
 
       print(user?.toJson());

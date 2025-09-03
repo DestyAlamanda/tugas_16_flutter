@@ -150,18 +150,63 @@ class AuthenticationAPI {
       body["image"] = imageBase64;
     }
 
-    final res = await http.post(
+    final response = await http.post(
       url,
       headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
       body: body,
     );
 
-    final data = jsonDecode(res.body);
+    final data = jsonDecode(response.body);
 
-    if (res.statusCode == 200) {
+    if (response.statusCode == 200) {
       return data['message'] ?? "success";
     } else {
       throw Exception(data['message'] ?? "Gagal menambahkan menu");
     }
+  }
+
+  static Future<String> updateMenu(
+    int id,
+    String name,
+    String description,
+    String price,
+    File? image,
+  ) async {
+    final url = Uri.parse(Endpoint.menus);
+    final token = await PreferenceHandler.getToken();
+
+    String? imageBase64;
+    if (image != null) {
+      final bytes = await image.readAsBytes();
+      imageBase64 = base64Encode(bytes);
+    }
+
+    final response = await http.put(
+      url,
+      headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
+      body: {
+        "name": name,
+        "description": description,
+        "price": price,
+        if (imageBase64 != null) "image": imageBase64,
+      },
+    );
+
+    final data = jsonDecode(response.body);
+    if (response.statusCode == 200) return "success";
+    return data['message'] ?? "Gagal update menu";
+  }
+
+  // Hapus menu
+  static Future<String> deleteMenu(int id) async {
+    final token = await PreferenceHandler.getToken();
+    final url = Uri.parse(Endpoint.menus);
+    final response = await http.delete(
+      url,
+      headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
+    );
+    final data = jsonDecode(response.body);
+    if (response.statusCode == 200) return "success";
+    return data['message'];
   }
 }

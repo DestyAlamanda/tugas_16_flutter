@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tugas16_flutter/model/menu_model.dart';
+import 'package:tugas16_flutter/views/edit_menu.dart';
+
+enum MenuItem { item1, item2 }
 
 class DetailMenu extends StatefulWidget {
   final MenuModel menu;
@@ -13,6 +16,41 @@ class _DetailMenuState extends State<DetailMenu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("Detail Menu"),
+        actions: [
+          PopupMenuButton<MenuItem>(
+            onSelected: (value) {
+              if (value == MenuItem.item1) {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => EditMenu(menu: widget.menu),
+                  ),
+                );
+              } else if (value == MenuItem.item2) {
+                print("Hapus diklik");
+              }
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem(value: MenuItem.item1, child: Text("edit")),
+              PopupMenuItem(value: MenuItem.item2, child: Text("hapus")),
+            ],
+          ),
+        ],
+      ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     DetailMenu.showAddDialog(context, () {
+      //       // callback ketika berhasil update/tambah menu
+      //       setState(() {
+      //         // misalnya reload data list menu
+      //       });
+      //     });
+      //   },
+      //   backgroundColor: Colors.orange,
+      //   child: const Icon(Icons.shopping_cart),
+      // ),
       // backgroundColor: Colors.grey[100],
       // appBar: AppBar(
       //   title: Text(widget.menu.name),

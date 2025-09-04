@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tugas16_flutter/model/menu_model.dart';
 import 'package:tugas16_flutter/views/detail_menu.dart';
 
-class MenuPage extends StatelessWidget {
+class MenuPage extends StatefulWidget {
   final List<MenuModel> menus;
 
   const MenuPage({super.key, required this.menus});
@@ -10,9 +10,14 @@ class MenuPage extends StatelessWidget {
   static const String id = "/menu";
 
   @override
+  State<MenuPage> createState() => _MenuPageState();
+}
+
+class _MenuPageState extends State<MenuPage> {
+  bool isLiked = false;
+  @override
   Widget build(BuildContext context) {
-    bool isLiked = false;
-    if (menus.isEmpty) {
+    if (widget.menus.isEmpty) {
       return const Center(child: Text("Belum ada menu tersedia"));
     }
 
@@ -26,9 +31,9 @@ class MenuPage extends StatelessWidget {
         mainAxisSpacing: 16,
         childAspectRatio: 0.75,
       ),
-      itemCount: menus.length,
+      itemCount: widget.menus.length,
       itemBuilder: (context, index) {
-        final menu = menus[index];
+        final menu = widget.menus[index];
         return GestureDetector(
           onTap: () async {
             await Navigator.push(
@@ -111,27 +116,34 @@ class MenuPage extends StatelessWidget {
                   child: const Text("⭐ 9.6"),
                 ),
               ),
-
-              // Positioned(
-              //   bottom: 8,
-              //   right: 8,
-              //   child: Container(
-              //     decoration: BoxDecoration(
-              //       shape: BoxShape.circle,
-              //       color: Colors.white,
-              //     ),
-              //     child: IconButton(
-              //       onPressed: () {
-              //         setState(() {
-              //           isLiked = !isLiked;
-              //         });
-              //         if (isLiked) print("Disukai");
-              //       },
-              //       icon: const Icon(Icons.favorite, size: 40),
-              //       color: isLiked ? Colors.pink[500] : Colors.grey,
-              //     ),
-              //   ),
-              // ),
+              Positioned(
+                top: 8,
+                right: 8,
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                  ),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(50),
+                    onTap: () {
+                      setState(() {
+                        isLiked = !isLiked;
+                      });
+                      if (isLiked) print("Disukai");
+                    },
+                    child: Padding(
+                      padding: EdgeInsetsGeometry.all(6),
+                      child: Icon(
+                        Icons.favorite,
+                        size: 25,
+                        color: isLiked ? Colors.pink[500] : Colors.grey,
+                      ),
+                      // ),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         );

@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final menuModel = menuModelFromJson(jsonString);
-
 class MenuModel {
   final int id;
   final String name;

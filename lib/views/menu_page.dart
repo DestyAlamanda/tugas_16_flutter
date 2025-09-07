@@ -4,8 +4,9 @@ import 'package:tugas16_flutter/views/detail_menu.dart';
 
 class MenuPage extends StatefulWidget {
   final List<MenuModel> menus;
+  final Function(MenuModel)? onTapMenu; // Tambahkan callback opsional
 
-  const MenuPage({super.key, required this.menus});
+  const MenuPage({super.key, required this.menus, this.onTapMenu});
 
   static const String id = "/menu";
 
@@ -15,6 +16,7 @@ class MenuPage extends StatefulWidget {
 
 class _MenuPageState extends State<MenuPage> {
   bool isLiked = false;
+
   @override
   Widget build(BuildContext context) {
     if (widget.menus.isEmpty) {
@@ -36,10 +38,14 @@ class _MenuPageState extends State<MenuPage> {
         final menu = widget.menus[index];
         return GestureDetector(
           onTap: () async {
-            await Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => DetailMenu(menu: menu)),
-            );
+            if (widget.onTapMenu != null) {
+              widget.onTapMenu!(menu); // panggil callback dari Home
+            } else {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => DetailMenu(menu: menu)),
+              );
+            }
           },
           child: Stack(
             children: [
@@ -132,14 +138,13 @@ class _MenuPageState extends State<MenuPage> {
                       });
                       if (isLiked) print("Disukai");
                     },
-                    child: Padding(
-                      padding: EdgeInsetsGeometry.all(6),
+                    child: const Padding(
+                      padding: EdgeInsets.all(6),
                       child: Icon(
                         Icons.favorite,
                         size: 25,
-                        color: isLiked ? Colors.pink[500] : Colors.grey,
+                        color: Colors.grey, // default
                       ),
-                      // ),
                     ),
                   ),
                 ),

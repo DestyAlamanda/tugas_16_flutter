@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:tugas16_flutter/api/api_service.dart';
 import 'package:tugas16_flutter/model/menu_model.dart';
-import 'package:tugas16_flutter/views/edit_menu.dart';
+import 'package:tugas16_flutter/views/edit_menu_show.dart';
 
 enum MenuItem { item1, item2 }
 
@@ -13,6 +16,14 @@ class DetailMenu extends StatefulWidget {
 }
 
 class _DetailMenuState extends State<DetailMenu> {
+  late MenuModel currentMenu;
+
+  @override
+  void initState() {
+    super.initState();
+    currentMenu = widget.menu;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,42 +31,72 @@ class _DetailMenuState extends State<DetailMenu> {
         title: const Text("Detail Menu"),
         actions: [
           PopupMenuButton<MenuItem>(
-            onSelected: (value) {
+            onSelected: (value) async {
               if (value == MenuItem.item1) {
-                Navigator.of(context).push(
+                final updatedMenu = await Navigator.push(
+                  context,
                   MaterialPageRoute(
-                    builder: (context) => EditMenu(menu: widget.menu),
+                    builder: (_) => EditMenuPage(menu: currentMenu),
                   ),
                 );
+                if (updatedMenu != null && updatedMenu is MenuModel) {
+                  setState(() => currentMenu = updatedMenu);
+                  Navigator.pop(context, true); // trigger refresh di Home
+                }
               } else if (value == MenuItem.item2) {
-                print("Hapus diklik");
+                final confirm = await showDialog<bool>(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text("Hapus Menu"),
+                    content: const Text(
+                      "Apakah Anda yakin ingin menghapus menu ini?",
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, false),
+                        child: const Text("Batal"),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, true),
+                        child: const Text(
+                          "Hapus",
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+
+                if (confirm == true) {
+                  try {
+                    final result = await AuthenticationAPI.deleteMenu(
+                      currentMenu.id,
+                    );
+                    if (result == "success") {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Menu berhasil dihapus")),
+                      );
+                      Navigator.pop(context, true);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Gagal menghapus menu")),
+                      );
+                    }
+                  } catch (e) {
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text("Error: $e")));
+                  }
+                }
               }
             },
-            itemBuilder: (context) => [
-              PopupMenuItem(value: MenuItem.item1, child: Text("edit")),
-              PopupMenuItem(value: MenuItem.item2, child: Text("hapus")),
+            itemBuilder: (context) => const [
+              PopupMenuItem(value: MenuItem.item1, child: Text("Edit")),
+              PopupMenuItem(value: MenuItem.item2, child: Text("Hapus")),
             ],
           ),
         ],
       ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     DetailMenu.showAddDialog(context, () {
-      //       // callback ketika berhasil update/tambah menu
-      //       setState(() {
-      //         // misalnya reload data list menu
-      //       });
-      //     });
-      //   },
-      //   backgroundColor: Colors.orange,
-      //   child: const Icon(Icons.shopping_cart),
-      // ),
-      // backgroundColor: Colors.grey[100],
-      // appBar: AppBar(
-      //   title: Text(widget.menu.name),
-      //   backgroundColor: Colors.orange,
-      // ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 50),
         child: Column(
@@ -63,54 +104,49 @@ class _DetailMenuState extends State<DetailMenu> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(30),
-              child: Image.network(
-                widget.menu.imageUrl ?? '',
-                width: double.infinity,
-                height: 300,
-                fit: BoxFit.cover,
-              ),
+              child: currentMenu.imageUrl != null
+                  ? currentMenu.imageUrl!.startsWith("http")
+                        ? Image.network(
+                            currentMenu.imageUrl!,
+                            width: double.infinity,
+                            height: 300,
+                            fit: BoxFit.cover,
+                          )
+                        : Image.file(
+                            File(currentMenu.imageUrl!),
+                            width: double.infinity,
+                            height: 300,
+                            fit: BoxFit.cover,
+                          )
+                  : Container(
+                      height: 300,
+                      color: Colors.grey[300],
+                      child: const Center(child: Text("No Image")),
+                    ),
             ),
-
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Positioned(
-                  top: 8,
-                  left: 8,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(13),
-                    ),
-                    child: const Text("⭐ 9.6"),
-                  ),
-                ),
+                const Text("⭐ 9.6"),
                 Text(
-                  "Rp ${widget.menu.price}",
-                  style: TextStyle(fontSize: 20, color: Colors.black),
+                  "Rp ${currentMenu.price}",
+                  style: const TextStyle(fontSize: 20, color: Colors.black),
                 ),
               ],
             ),
-
-            SizedBox(height: 15),
-
+            const SizedBox(height: 15),
             Text(
-              widget.menu.name,
+              currentMenu.name,
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-
             const Text(
               "Description",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-            Text(widget.menu.description, style: const TextStyle(fontSize: 16)),
+            Text(currentMenu.description, style: const TextStyle(fontSize: 16)),
           ],
         ),
       ),

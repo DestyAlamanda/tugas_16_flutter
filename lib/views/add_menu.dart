@@ -24,46 +24,52 @@ class _AddMenuState extends State<AddMenu> {
     final picked = await picker.pickImage(source: ImageSource.gallery);
 
     if (picked != null) {
-      setState(() {
-        selectedImage = File(picked.path);
-      });
+      setState(() => selectedImage = File(picked.path));
     }
   }
 
   void handleSubmit() async {
-    if (_formKey.currentState!.validate()) {
-      setState(() => loading = true);
+    if (!_formKey.currentState!.validate()) return;
 
+    setState(() => loading = true);
+
+    try {
       final result = await AuthenticationAPI.addMenu(
         nameController.text,
         descController.text,
         priceController.text,
         selectedImage,
       );
+      print("Hasil addMenu API: $result");
 
       setState(() => loading = false);
+
       if (result == "success") {
-        Navigator.pop(context, true);
+        Navigator.pop(context, true); // return true biar reload list menu
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text("Menu berhasil ditambahkan"),
             backgroundColor: Colors.green,
           ),
         );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(result), backgroundColor: Colors.red),
-        );
       }
+    } catch (e) {
+      setState(() => loading = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Gagal menambahkan menu: $e"),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("tambah menu"), centerTitle: true),
+      appBar: AppBar(title: const Text("Tambah Menu"), centerTitle: true),
       body: Padding(
-        padding: EdgeInsetsGeometry.all(24),
+        padding: const EdgeInsets.all(24.0),
         child: Form(
           key: _formKey,
           child: ListView(
@@ -91,28 +97,28 @@ class _AddMenuState extends State<AddMenu> {
                                 size: 40,
                                 color: Colors.grey[600],
                               ),
-                              SizedBox(height: 8),
-                              Text("Tap untuk pilih gambar"),
+                              const SizedBox(height: 8),
+                              const Text("Tap untuk pilih gambar"),
                             ],
                           ),
                         ),
                 ),
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 20),
               TextFormField(
                 controller: nameController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Nama Menu",
                   prefixIcon: Icon(Icons.fastfood_outlined),
                 ),
                 validator: (val) =>
                     val == null || val.isEmpty ? "Nama wajib diisi" : null,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextFormField(
                 controller: priceController,
                 keyboardType: TextInputType.number,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Harga",
                   prefixIcon: Icon(Icons.attach_money),
                 ),
@@ -122,23 +128,23 @@ class _AddMenuState extends State<AddMenu> {
                   return null;
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextFormField(
                 controller: descController,
                 maxLines: 2,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Deskripsi",
                   prefixIcon: Icon(Icons.description),
                 ),
                 validator: (val) =>
                     val == null || val.isEmpty ? "Deskripsi wajib diisi" : null,
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 20),
               ElevatedButton.icon(
                 onPressed: loading ? null : handleSubmit,
-                icon: Icon(Icons.add),
+                icon: const Icon(Icons.add),
                 label: loading
-                    ? SizedBox(
+                    ? const SizedBox(
                         width: 20,
                         height: 20,
                         child: CircularProgressIndicator(
@@ -146,9 +152,9 @@ class _AddMenuState extends State<AddMenu> {
                           strokeWidth: 2,
                         ),
                       )
-                    : Text("Tambah Menu"),
+                    : const Text("Tambah Menu"),
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 14),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
                 ),
               ),
             ],

@@ -172,8 +172,11 @@ class AuthenticationAPI {
     String price,
     File? image,
   ) async {
-    final url = Uri.parse(Endpoint.menus);
     final token = await PreferenceHandler.getToken();
+
+    if (token == null) {
+      throw Exception("Token tidak ditemukan, silakan login ulang");
+    }
 
     String? imageBase64;
     if (image != null) {
@@ -181,7 +184,8 @@ class AuthenticationAPI {
       imageBase64 = base64Encode(bytes);
     }
 
-    final response = await http.put(
+    final url = Uri.parse("${Endpoint.menus}/$id");
+    final res = await http.put(
       url,
       headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
       body: {
@@ -192,21 +196,27 @@ class AuthenticationAPI {
       },
     );
 
-    final data = jsonDecode(response.body);
-    if (response.statusCode == 200) return "success";
-    return data['message'] ?? "Gagal update menu";
+    final data = jsonDecode(res.body);
+    if (res.statusCode == 200) {
+      return data['message'] ?? "Menu berhasil diperbarui";
+    } else {
+      throw Exception(data['message'] ?? "Gagal update menu");
+    }
   }
 
   // Hapus menu
   static Future<String> deleteMenu(int id) async {
     final token = await PreferenceHandler.getToken();
-    final url = Uri.parse(Endpoint.menus);
+    if (token == null) throw Exception("Token tidak ditemukan");
+
+    final url = Uri.parse("${Endpoint.menus}/$id");
     final response = await http.delete(
       url,
       headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
     );
+
     final data = jsonDecode(response.body);
     if (response.statusCode == 200) return "success";
-    return data['message'];
+    throw Exception(data['message'] ?? "Gagal menghapus menu");
   }
 }

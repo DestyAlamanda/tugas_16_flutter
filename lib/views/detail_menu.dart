@@ -32,18 +32,29 @@ class _DetailMenuState extends State<DetailMenu> {
         actions: [
           PopupMenuButton<MenuItem>(
             onSelected: (value) async {
+              // ===== EDIT MENU =====
               if (value == MenuItem.item1) {
-                final updatedMenu = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => EditMenuPage(menu: currentMenu),
+                final updatedMenu = await showDialog<MenuModel>(
+                  context: context,
+                  builder: (context) => Dialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    insetPadding: const EdgeInsets.all(16),
+                    child: Material(
+                      // ⬅️ supaya TextField ada Material ancestor
+                      child: EditMenuPage(menu: currentMenu),
+                    ),
                   ),
                 );
-                if (updatedMenu != null && updatedMenu is MenuModel) {
+
+                if (updatedMenu != null) {
                   setState(() => currentMenu = updatedMenu);
-                  Navigator.pop(context, true); // trigger refresh di Home
+                  Navigator.pop(context, true); // trigger refresh Home
                 }
-              } else if (value == MenuItem.item2) {
+              }
+              // ===== HAPUS MENU =====
+              else if (value == MenuItem.item2) {
                 final confirm = await showDialog<bool>(
                   context: context,
                   builder: (context) => AlertDialog(
@@ -79,7 +90,7 @@ class _DetailMenuState extends State<DetailMenu> {
                       Navigator.pop(context, true);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("Gagal menghapus menu")),
+                        const SnackBar(content: Text("Gagal menghapus menu")),
                       );
                     }
                   } catch (e) {

@@ -4,7 +4,7 @@ import 'package:tugas16_flutter/views/detail_menu.dart';
 
 class MenuPage extends StatefulWidget {
   final List<MenuModel> menus;
-  final Function(MenuModel)? onTapMenu; // Tambahkan callback opsional
+  final Function(MenuModel)? onTapMenu; // Callback opsional
 
   const MenuPage({super.key, required this.menus, this.onTapMenu});
 
@@ -15,7 +15,7 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuPageState extends State<MenuPage> {
-  bool isLiked = false;
+  Set<int> likedItems = {}; // Simpan index menu yang disukai
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +36,8 @@ class _MenuPageState extends State<MenuPage> {
       itemCount: widget.menus.length,
       itemBuilder: (context, index) {
         final menu = widget.menus[index];
+        final isLiked = likedItems.contains(index);
+
         return GestureDetector(
           onTap: () async {
             if (widget.onTapMenu != null) {
@@ -122,28 +124,52 @@ class _MenuPageState extends State<MenuPage> {
                   child: const Text("⭐ 9.6"),
                 ),
               ),
+
+              // Like button
               Positioned(
                 top: 8,
                 right: 8,
                 child: Container(
+                  width: 36,
+                  height: 36,
                   decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.95),
                     shape: BoxShape.circle,
-                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        spreadRadius: 0,
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(50),
-                    onTap: () {
-                      setState(() {
-                        isLiked = !isLiked;
-                      });
-                      if (isLiked) print("Disukai");
-                    },
-                    child: const Padding(
-                      padding: EdgeInsets.all(6),
-                      child: Icon(
-                        Icons.favorite,
-                        size: 25,
-                        color: Colors.grey, // default
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(18),
+                      onTap: () {
+                        setState(() {
+                          if (isLiked) {
+                            likedItems.remove(index);
+                          } else {
+                            likedItems.add(index);
+                            print("Menu ${menu.name} disukai");
+                          }
+                        });
+                      },
+                      child: Center(
+                        child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 300),
+                          child: Icon(
+                            isLiked
+                                ? Icons.favorite_rounded
+                                : Icons.favorite_border_rounded,
+                            key: ValueKey(isLiked),
+                            size: 18,
+                            color: isLiked ? Colors.red : Colors.grey[600],
+                          ),
+                        ),
                       ),
                     ),
                   ),

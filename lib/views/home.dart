@@ -80,11 +80,8 @@ class _HomeState extends State<Home> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.orange,
         onPressed: () async {
-          final result = await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => AddMenu()),
-          );
-          if (result == true) loadMenus();
+          await AddMenuDialog.show(context);
+          loadMenus();
         },
         child: const Icon(Icons.add, color: Colors.white),
       ),
@@ -101,7 +98,6 @@ class _HomeState extends State<Home> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Header User
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 25,
@@ -174,22 +170,21 @@ class _HomeState extends State<Home> {
                 ),
                 const SizedBox(height: 10),
 
-                // Carousel indicator
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: imgList.asMap().entries.map((entry) {
-                    return Container(
-                      width: 8,
+                    return AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      width: _current == entry.key ? 32 : 8,
+
                       height: 8,
-                      margin: const EdgeInsets.symmetric(
-                        vertical: 8.0,
-                        horizontal: 4.0,
-                      ),
+                      margin: const EdgeInsets.symmetric(horizontal: 4.0),
                       decoration: BoxDecoration(
-                        shape: BoxShape.circle,
+                        borderRadius: BorderRadius.circular(12),
+
                         color: _current == entry.key
-                            ? Colors.blueAccent
-                            : Colors.grey,
+                            ? Colors.orange
+                            : Colors.grey.withOpacity(0.3),
                       ),
                     );
                   }).toList(),
@@ -203,7 +198,6 @@ class _HomeState extends State<Home> {
                   ),
                 ),
 
-                // Menu Page Grid
                 MenuPage(
                   menus: filteredMenus,
                   onTapMenu: (menu) async {

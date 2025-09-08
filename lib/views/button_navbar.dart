@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:tugas16_flutter/views/about.dart';
 import 'package:tugas16_flutter/views/home.dart';
+import 'package:tugas16_flutter/views/reservation.dart';
 
 class ButtomNavbar extends StatefulWidget {
   const ButtomNavbar({super.key});
@@ -11,7 +13,11 @@ class ButtomNavbar extends StatefulWidget {
 class _ButtomNavbarState extends State<ButtomNavbar> {
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = [const Home(), const AboutPage()];
+  final List<Widget> _pages = [
+    const Home(),
+    ReservationPage(),
+    const AboutPage(),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +36,7 @@ class _ButtomNavbarState extends State<ButtomNavbar> {
         },
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.info), label: 'Tentang'),
         ],
       ),
@@ -37,37 +44,37 @@ class _ButtomNavbarState extends State<ButtomNavbar> {
   }
 }
 
-class AboutPage extends StatelessWidget {
-  const AboutPage({super.key});
+// class AboutPage extends StatelessWidget {
+//   const AboutPage({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(16),
-      child: ListView(
-        children: [
-          Text(
-            'Tentang Aplikasi',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Color(0xff21BDCA),
-            ),
-          ),
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: EdgeInsets.all(16),
+//       child: ListView(
+//         children: [
+//           Text(
+//             'Tentang Aplikasi',
+//             style: TextStyle(
+//               fontSize: 24,
+//               fontWeight: FontWeight.bold,
+//               color: Color(0xff21BDCA),
+//             ),
+//           ),
 
-          SizedBox(height: 16),
-          Text(
-            'plikasi ini dikembangkan untuk memenuhi tugas Flutter 7 & 8, dengan fitur formulir interaktif yang dapat diakses melalui Drawer, serta navigasi bawah yang memanfaatkan BottomNavigationBar.',
-            style: TextStyle(fontSize: 16),
-          ),
-          SizedBox(height: 16),
-          Text('Developer: Manda', style: TextStyle(fontSize: 16)),
-          Text(
-            'Versi: 1.0.0',
-            style: TextStyle(fontSize: 16, color: Color(0xff21BDCA)),
-          ),
-        ],
-      ),
-    );
-  }
-}
+//           SizedBox(height: 16),
+//           Text(
+//             'plikasi ini dikembangkan untuk memenuhi tugas Flutter 7 & 8, dengan fitur formulir interaktif yang dapat diakses melalui Drawer, serta navigasi bawah yang memanfaatkan BottomNavigationBar.',
+//             style: TextStyle(fontSize: 16),
+//           ),
+//           SizedBox(height: 16),
+//           Text('Developer: Manda', style: TextStyle(fontSize: 16)),
+//           Text(
+//             'Versi: 1.0.0',
+//             style: TextStyle(fontSize: 16, color: Color(0xff21BDCA)),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }

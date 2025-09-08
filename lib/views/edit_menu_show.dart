@@ -11,6 +11,18 @@ class EditMenuPage extends StatefulWidget {
 
   @override
   State<EditMenuPage> createState() => _EditMenuPageState();
+
+  /// Fungsi helper untuk buka dialog
+  static Future<MenuModel?> show(BuildContext context, MenuModel menu) {
+    return showDialog<MenuModel>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: EditMenuPage(menu: menu),
+      ),
+    );
+  }
 }
 
 class _EditMenuPageState extends State<EditMenuPage> {
@@ -43,15 +55,12 @@ class _EditMenuPageState extends State<EditMenuPage> {
     final picker = ImagePicker();
     final picked = await picker.pickImage(source: ImageSource.gallery);
     if (picked != null) {
-      setState(() {
-        selectedImage = File(picked.path);
-      });
+      setState(() => selectedImage = File(picked.path));
     }
   }
 
   Future<void> updateMenu() async {
     if (!_formKey.currentState!.validate()) return;
-
     setState(() => loading = true);
 
     try {
@@ -65,11 +74,12 @@ class _EditMenuPageState extends State<EditMenuPage> {
 
       setState(() => loading = false);
 
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(result), backgroundColor: Colors.green),
       );
 
-      // Kembalikan MenuModel baru dengan gambar File atau URL
+      // Return data baru
       final updatedMenu = MenuModel(
         id: widget.menu.id,
         name: nameController.text,
@@ -94,19 +104,27 @@ class _EditMenuPageState extends State<EditMenuPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Edit Menu")),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: SingleChildScrollView(
         child: Form(
           key: _formKey,
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
+              const Text(
+                "Edit Menu",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 16),
+
+              // Gambar
               GestureDetector(
                 onTap: pickImage,
                 child: selectedImage != null
                     ? Image.file(selectedImage!, height: 150)
-                    : widget.menu.imageUrl != null
+                    : (widget.menu.imageUrl != null &&
+                          widget.menu.imageUrl!.isNotEmpty)
                     ? widget.menu.imageUrl!.startsWith("http")
                           ? Image.network(widget.menu.imageUrl!, height: 150)
                           : Image.file(File(widget.menu.imageUrl!), height: 150)
@@ -119,6 +137,8 @@ class _EditMenuPageState extends State<EditMenuPage> {
                       ),
               ),
               const SizedBox(height: 16),
+
+              // Nama
               TextFormField(
                 controller: nameController,
                 decoration: const InputDecoration(
@@ -129,6 +149,8 @@ class _EditMenuPageState extends State<EditMenuPage> {
                     val == null || val.isEmpty ? "Nama wajib diisi" : null,
               ),
               const SizedBox(height: 20),
+
+              // Harga
               TextFormField(
                 controller: priceController,
                 keyboardType: TextInputType.number,
@@ -143,6 +165,8 @@ class _EditMenuPageState extends State<EditMenuPage> {
                 },
               ),
               const SizedBox(height: 20),
+
+              // Deskripsi
               TextFormField(
                 controller: descriptionController,
                 maxLines: 2,
@@ -154,22 +178,33 @@ class _EditMenuPageState extends State<EditMenuPage> {
                     val == null || val.isEmpty ? "Deskripsi wajib diisi" : null,
               ),
               const SizedBox(height: 20),
-              ElevatedButton.icon(
-                onPressed: loading ? null : updateMenu,
-                icon: const Icon(Icons.save),
-                label: loading
-                    ? const SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                          strokeWidth: 2,
-                        ),
-                      )
-                    : const Text("Simpan"),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                ),
+
+              // Tombol
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: loading ? null : updateMenu,
+                      child: loading
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
+                          : const Text("Simpan"),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text("Batal"),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

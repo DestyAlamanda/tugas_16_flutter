@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:tugas16_flutter/api/endpoint/endpoint.dart';
 import 'package:tugas16_flutter/model/menu_model.dart';
 import 'package:tugas16_flutter/model/register_model.dart';
+import 'package:tugas16_flutter/model/reservasi_model.dart';
 import 'package:tugas16_flutter/model/user_model.dart';
 import 'package:tugas16_flutter/preference/shared_preference.dart';
 
@@ -159,7 +160,7 @@ class AuthenticationAPI {
     final data = jsonDecode(response.body);
 
     if (response.statusCode == 200) {
-      return data['message'] ?? "success";
+      return "success";
     } else {
       throw Exception(data['message'] ?? "Gagal menambahkan menu");
     }
@@ -218,5 +219,73 @@ class AuthenticationAPI {
     final data = jsonDecode(response.body);
     if (response.statusCode == 200) return "success";
     throw Exception(data['message'] ?? "Gagal menghapus menu");
+  }
+
+  static Future<String> createReservation({
+    required String reservedAt,
+    required int guestCount,
+    required String notes,
+  }) async {
+    final token = await PreferenceHandler.getToken();
+    if (token == null)
+      throw Exception("Token tidak ditemukan, silakan login ulang");
+
+    final url = Uri.parse(Endpoint.reservations); // pakai Endpoint.reservations
+    final response = await http.post(
+      url,
+      headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
+      body: {
+        "reserved_at": reservedAt,
+        "guest_count": guestCount.toString(),
+        "notes": notes,
+      },
+    );
+
+    final data = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      return "success";
+    } else {
+      throw Exception(data['message'] ?? "Gagal membuat reservasi");
+    }
+  }
+
+  static Future<List<ReservationModel>> getReservations() async {
+    final token = await PreferenceHandler.getToken();
+    if (token == null)
+      throw Exception("Token tidak ditemukan, silakan login ulang");
+
+    final url = Uri.parse(Endpoint.reservations);
+    final response = await http.get(
+      url,
+      headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
+    );
+
+    final data = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      return (data['data'] as List)
+          .map((e) => ReservationModel.fromJson(e))
+          .toList();
+    } else {
+      throw Exception(data['message'] ?? "Gagal mengambil reservasi");
+    }
+  }
+
+  static Future<String> cancelReservation(int id) async {
+    final token = await PreferenceHandler.getToken();
+    if (token == null)
+      throw Exception("Token tidak ditemukan, silakan login ulang");
+
+    final url = Uri.parse('${Endpoint.reservations}/$id');
+    final response = await http.delete(
+      url,
+      headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
+    );
+
+    final data = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      return "success";
+    } else {
+      throw Exception(data['message'] ?? "Gagal membatalkan reservasi");
+    }
   }
 }

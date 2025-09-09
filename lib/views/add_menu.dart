@@ -38,22 +38,20 @@ class AddMenuDialog {
         setState(() => loading = false);
 
         if (result == "success") {
-          /// 🔹 Buat object MenuModel baru
           final addMenu = MenuModel(
-            id: 0, // sementara 0, kalau API balikin ID bisa diganti
+            id: 0,
             name: nameController.text,
             description: descController.text,
             price: priceController.text,
             imageUrl: selectedImage?.path,
           );
 
-          /// 🔹 Lempar balik ke halaman pemanggil (Home)
           Navigator.pop(context, addMenu);
 
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text("Menu berhasil ditambahkan"),
-              backgroundColor: Colors.green,
+              backgroundColor: Colors.orange,
             ),
           );
         }

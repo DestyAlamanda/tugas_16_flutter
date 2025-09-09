@@ -76,7 +76,7 @@ class _EditMenuPageState extends State<EditMenuPage> {
 
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(result), backgroundColor: Colors.green),
+        SnackBar(content: Text(result), backgroundColor: Colors.orange),
       );
 
       // Return data baru

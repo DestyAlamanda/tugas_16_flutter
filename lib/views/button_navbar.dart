@@ -27,7 +27,7 @@ class _ButtomNavbarState extends State<ButtomNavbar> {
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
         currentIndex: _selectedIndex,
-        selectedItemColor: Color(0xff21BDCA),
+        selectedItemColor: Colors.orange,
         unselectedItemColor: Colors.grey,
         onTap: (int index) {
           setState(() {
@@ -36,7 +36,10 @@ class _ButtomNavbarState extends State<ButtomNavbar> {
         },
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_month),
+            label: 'Reservasion',
+          ),
           BottomNavigationBarItem(icon: Icon(Icons.info), label: 'Tentang'),
         ],
       ),

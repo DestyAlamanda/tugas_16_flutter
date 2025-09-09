@@ -78,10 +78,16 @@ class _MenuPageState extends State<MenuPage> {
                                 fit: BoxFit.cover,
                                 width: double.infinity,
                               )
-                            : const Icon(
-                                Icons.fastfood,
-                                size: 64,
-                                color: Colors.orange,
+                            : Container(
+                                width: double.infinity,
+                                color: Colors.grey[200],
+                                child: const Center(
+                                  child: Icon(
+                                    Icons.fastfood,
+                                    size: 64,
+                                    color: Colors.orange,
+                                  ),
+                                ),
                               ),
                       ),
                     ),

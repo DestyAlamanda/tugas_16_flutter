@@ -30,25 +30,22 @@ class _AboutPageState extends State<AboutPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1A2A80),
+      backgroundColor: Colors.orange,
       body: SafeArea(
         child: Stack(
           alignment: Alignment.topCenter,
           children: [
-            // Bagian putih (content)
             Container(
-              margin: const EdgeInsets.only(top: 120),
+              margin: const EdgeInsets.only(top: 100),
               width: double.infinity,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(
-                  40,
-                ), // semua sisi melengkung
+                borderRadius: BorderRadius.circular(40),
               ),
 
               child: SingleChildScrollView(
                 padding: const EdgeInsets.fromLTRB(24, 80, 24, 24),
-                // kasih top padding 80 biar isi nggak ketimpa avatar
+
                 child: Column(
                   children: [
                     // Nama

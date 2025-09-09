@@ -190,12 +190,19 @@ class _HomeState extends State<Home> {
                   }).toList(),
                 ),
 
-                const Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Text(
-                    "Menu",
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                  ),
+                Row(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Text(
+                        "Menu",
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
 
                 MenuPage(

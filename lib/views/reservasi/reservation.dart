@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tugas16_flutter/api/api_service.dart';
 import 'package:tugas16_flutter/model/reservasi_model.dart';
-import 'package:tugas16_flutter/views/add_reservation.dart';
+import 'package:tugas16_flutter/views/reservasi/add_reservation.dart';
 
 class ReservationPage extends StatefulWidget {
   const ReservationPage({super.key});
@@ -135,8 +135,8 @@ class _ReservationPageState extends State<ReservationPage> {
           "Reservasi Saya",
           style: TextStyle(fontWeight: FontWeight.w600, fontSize: 22),
         ),
-        backgroundColor: Colors.deepOrangeAccent,
-        foregroundColor: Colors.grey.shade800,
+        backgroundColor: Colors.orange,
+        foregroundColor: Colors.white,
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.orange,

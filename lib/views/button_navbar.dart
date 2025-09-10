@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tugas16_flutter/views/about.dart';
 import 'package:tugas16_flutter/views/home.dart';
-import 'package:tugas16_flutter/views/reservation.dart';
+import 'package:tugas16_flutter/views/reservasi/reservation.dart';
 
 class ButtomNavbar extends StatefulWidget {
   const ButtomNavbar({super.key});

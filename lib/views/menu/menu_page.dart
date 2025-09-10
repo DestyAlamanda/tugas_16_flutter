@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tugas16_flutter/model/menu_model.dart';
-import 'package:tugas16_flutter/views/detail_menu.dart';
+import 'package:tugas16_flutter/views/menu/detail_menu.dart';
 
 class MenuPage extends StatefulWidget {
   final List<MenuModel> menus;

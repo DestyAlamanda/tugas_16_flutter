@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:tugas16_flutter/api/api_service.dart';
 import 'package:tugas16_flutter/model/menu_model.dart';
-import 'package:tugas16_flutter/views/edit_menu_show.dart';
+import 'package:tugas16_flutter/views/menu/edit_menu_show.dart';
 
 enum MenuItem { item1, item2 }
 

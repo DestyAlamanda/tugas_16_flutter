@@ -75,9 +75,40 @@ class AddReservationDialog {
                   TextFormField(
                     controller: guestController,
                     keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      labelText: "Jumlah Tamu",
-                      prefixIcon: Icon(Icons.people),
+                    decoration: InputDecoration(
+                      prefixIcon: Container(
+                        margin: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.orange.shade50,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Icon(
+                          Icons.people,
+                          color: Colors.orange.shade600,
+                        ),
+                      ),
+                      filled: true,
+                      fillColor: Colors.grey.shade50,
+                      hintText: "Jumlah tamu",
+                      hintStyle: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.grey.shade200),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.grey.shade200),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(
+                          color: Colors.orange.shade600,
+                          width: 2,
+                        ),
+                      ),
                     ),
                     validator: (val) {
                       if (val == null || val.isEmpty) {
@@ -93,10 +124,48 @@ class AddReservationDialog {
 
                   TextFormField(
                     controller: notesController,
-                    decoration: const InputDecoration(
-                      labelText: "Catatan",
-                      prefixIcon: Icon(Icons.note_alt),
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      prefixIcon: Container(
+                        margin: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.orange.shade50,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Icon(Icons.note, color: Colors.orange.shade600),
+                      ),
+                      filled: true,
+                      fillColor: Colors.grey.shade50,
+                      hintText: "Catatan (opsional)",
+                      hintStyle: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.grey.shade200),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.grey.shade200),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(
+                          color: Colors.orange.shade600,
+                          width: 2,
+                        ),
+                      ),
                     ),
+                    // validator: (val) {
+                    //   if (val == null || val.isEmpty) {
+                    //     return "Jumlah tamu wajib diisi";
+                    //   }
+                    //   if (int.tryParse(val) == null) {
+                    //     return "Harus berupa angka";
+                    //   }
+                    //   return null;
+                    // },
                   ),
                   const SizedBox(height: 12),
 
@@ -149,19 +218,40 @@ class AddReservationDialog {
               onPressed: () => Navigator.pop(context, false),
               child: const Text("Batal"),
             ),
-            ElevatedButton(
-              onPressed: loading ? null : () => handleReservation(setState),
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
-              child: loading
-                  ? const SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: Colors.white,
+            Expanded(
+              flex: 2,
+              child: ElevatedButton(
+                onPressed: loading ? null : () => handleReservation(setState),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange.shade600,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 14,
+                    horizontal: 14,
+                  ),
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  disabledBackgroundColor: Colors.grey.shade300,
+                ),
+                child: loading
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Text(
+                        "Tambah Menu",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    )
-                  : const Text("Reservasi"),
+              ),
             ),
           ],
         ),

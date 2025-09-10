@@ -21,6 +21,8 @@ class GetUserModel {
   );
 
   Map<String, dynamic> toJson() => {"message": message, "data": data?.toJson()};
+
+  toLowerCase() {}
 }
 
 class Data {

@@ -39,7 +39,7 @@ class _HomeState extends State<Home> {
   void loadMenus() {
     setState(() {
       futureMenus = AuthenticationAPI.getMenus().then((menus) {
-        // Urutkan menu bedasarkan nama secara alfabetis
+        // selalu urut A-Z
         menus.sort(
           (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()),
         );
@@ -75,6 +75,11 @@ class _HomeState extends State<Home> {
             .toList();
       });
     }
+
+    // tetap urut A-Z setelah filter
+    filteredMenus.sort(
+      (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()),
+    );
   }
 
   @override
@@ -89,138 +94,128 @@ class _HomeState extends State<Home> {
         },
         child: const Icon(Icons.add, color: Colors.white),
       ),
-
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: () async {
             await loadUserData();
             loadMenus();
           },
-
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 25,
-                    vertical: 20,
-                  ),
-                  child: Row(
-                    children: [
-                      const CircleAvatar(backgroundColor: Colors.grey),
-                      const SizedBox(width: 10),
-                      Text(
-                        "Hi, ${userData?.data?.name ?? ''}",
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
+          child: ListView(
+            children: [
+              // Header User
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 25,
+                  vertical: 20,
                 ),
-
-                // Search Bar
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: TextField(
-                    controller: searchController,
-                    onChanged: filterMenus,
-                    decoration: InputDecoration(
-                      hintText: "Cari menu...",
-                      prefixIcon: const Icon(
-                        Icons.search,
-                        color: Colors.orange,
-                      ),
-                      filled: true,
-                      fillColor: Colors.white,
-                      contentPadding: const EdgeInsets.symmetric(
-                        vertical: 0,
-                        horizontal: 16,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // Carousel
-                CarouselSlider(
-                  options: CarouselOptions(
-                    height: 200,
-                    autoPlay: true,
-                    enlargeCenterPage: true,
-                    viewportFraction: 0.9,
-                    aspectRatio: 16 / 9,
-                    onPageChanged: (index, reason) {
-                      setState(() => _current = index);
-                    },
-                  ),
-                  items: imgList.map((item) {
-                    return ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Image.asset(
-                        item,
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                      ),
-                    );
-                  }).toList(),
-                ),
-                const SizedBox(height: 10),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: imgList.asMap().entries.map((entry) {
-                    return AnimatedContainer(
-                      duration: const Duration(milliseconds: 300),
-                      width: _current == entry.key ? 32 : 8,
-
-                      height: 8,
-                      margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-
-                        color: _current == entry.key
-                            ? Colors.orange
-                            : Colors.grey.withOpacity(0.3),
-                      ),
-                    );
-                  }).toList(),
-                ),
-
-                Row(
+                child: Row(
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Text(
-                        "Menu",
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    const CircleAvatar(backgroundColor: Colors.grey),
+                    const SizedBox(width: 10),
+                    Text(
+                      "Hi, ${userData?.data?.name ?? ''}",
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ],
                 ),
+              ),
 
-                MenuPage(
-                  menus: filteredMenus,
-                  onTapMenu: (menu) async {
-                    final result = await Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => DetailMenu(menu: menu)),
-                    );
-                    if (result == true) loadMenus();
+              // Section Title
+              const Padding(
+                padding: EdgeInsets.all(16),
+                child: Text(
+                  "Penawaran Spesial",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
+
+              // Carousel
+              CarouselSlider(
+                options: CarouselOptions(
+                  height: 200,
+                  autoPlay: true,
+                  enlargeCenterPage: true,
+                  viewportFraction: 0.9,
+                  aspectRatio: 16 / 9,
+                  onPageChanged: (index, reason) {
+                    setState(() => _current = index);
                   },
                 ),
-              ],
-            ),
+                items: imgList.map((item) {
+                  return ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.asset(
+                      item,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                    ),
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 10),
+
+              // Carousel Indicator
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: imgList.asMap().entries.map((entry) {
+                  return AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    width: _current == entry.key ? 32 : 8,
+                    height: 8,
+                    margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: _current == entry.key
+                          ? Colors.orange
+                          : Colors.grey.withOpacity(0.3),
+                    ),
+                  );
+                }).toList(),
+              ),
+
+              // Search bar (tanpa filter icon)
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: TextField(
+                  controller: searchController,
+                  onChanged: filterMenus,
+                  decoration: InputDecoration(
+                    hintText: "Cari menu...",
+                    prefixIcon: const Icon(Icons.search, color: Colors.orange),
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
+              ),
+
+              // Section Title
+              const Padding(
+                padding: EdgeInsets.all(16),
+                child: Text(
+                  "Menu",
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                ),
+              ),
+
+              // Menu List
+              MenuPage(
+                menus: filteredMenus,
+                onTapMenu: (menu) async {
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => DetailMenu(menu: menu)),
+                  );
+                  if (result == true) loadMenus();
+                },
+              ),
+            ],
           ),
         ),
       ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tugas16_flutter/api/api_service.dart';
 import 'package:tugas16_flutter/auth/register_user.dart';
 import 'package:tugas16_flutter/model/register_model.dart';
-import 'package:tugas16_flutter/preference/shared_preference.dart';
+import 'package:tugas16_flutter/utils/shared_preference.dart';
 import 'package:tugas16_flutter/views/button_navbar.dart';
 // pastikan ada file ini
 

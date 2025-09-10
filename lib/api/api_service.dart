@@ -7,7 +7,7 @@ import 'package:tugas16_flutter/model/menu_model.dart';
 import 'package:tugas16_flutter/model/register_model.dart';
 import 'package:tugas16_flutter/model/reservasi_model.dart';
 import 'package:tugas16_flutter/model/user_model.dart';
-import 'package:tugas16_flutter/preference/shared_preference.dart';
+import 'package:tugas16_flutter/utils/shared_preference.dart';
 
 class AuthenticationAPI {
   // register user
@@ -54,7 +54,12 @@ class AuthenticationAPI {
   }
 
   // update profile
-  static Future<GetUserModel> updateUser({required String name}) async {
+  static Future<GetUserModel> updateUser(
+    String text,
+    String s,
+    param2, {
+    required String name,
+  }) async {
     final url = Uri.parse(Endpoint.profile);
     final token = await PreferenceHandler.getToken();
 

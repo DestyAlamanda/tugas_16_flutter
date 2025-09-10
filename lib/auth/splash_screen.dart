@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tugas16_flutter/auth/login.dart';
-import 'package:tugas16_flutter/preference/shared_preference.dart';
+import 'package:tugas16_flutter/utils/shared_preference.dart';
 import 'package:tugas16_flutter/views/button_navbar.dart';
 
 class SplashScreen extends StatefulWidget {

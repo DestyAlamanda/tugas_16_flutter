@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tugas16_flutter/model/menu_model.dart';
+import 'package:tugas16_flutter/utils/formatters.dart';
 import 'package:tugas16_flutter/views/menu/detail_menu.dart';
 
 class MenuPage extends StatefulWidget {
@@ -15,7 +16,8 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuPageState extends State<MenuPage> {
-  Set<int> likedItems = {}; // Simpan index menu yang disukai
+  late MenuModel currentMenu;
+  Set<int> likedItems = {}; // simpan index menu yang disukai
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +43,7 @@ class _MenuPageState extends State<MenuPage> {
         return GestureDetector(
           onTap: () async {
             if (widget.onTapMenu != null) {
-              widget.onTapMenu!(menu); // panggil callback dari Home
+              widget.onTapMenu!(menu);
             } else {
               await Navigator.push(
                 context,
@@ -104,8 +106,9 @@ class _MenuPageState extends State<MenuPage> {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            "Rp ${menu.price}",
-                            style: TextStyle(color: Colors.orange[800]),
+                            Formatters.formatPrice(
+                              double.tryParse(menu.price)?.toInt() ?? 0,
+                            ),
                           ),
                         ],
                       ),
@@ -160,7 +163,6 @@ class _MenuPageState extends State<MenuPage> {
                             likedItems.remove(index);
                           } else {
                             likedItems.add(index);
-                            print("Menu ${menu.name} disukai");
                           }
                         });
                       },
@@ -173,7 +175,7 @@ class _MenuPageState extends State<MenuPage> {
                                 : Icons.favorite_border_rounded,
                             key: ValueKey(isLiked),
                             size: 18,
-                            color: isLiked ? Colors.red : Colors.grey[600],
+                            color: isLiked ? Colors.orange : Colors.grey[600],
                           ),
                         ),
                       ),

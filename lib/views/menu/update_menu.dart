@@ -10,6 +10,7 @@ Future<MenuModel?> showUpdateMenuDialog(BuildContext context, MenuModel menu) {
   final nameController = TextEditingController(text: menu.name);
   final priceController = TextEditingController(text: menu.price);
   final descController = TextEditingController(text: menu.description);
+
   File? selectedImage;
   bool loading = false;
 
@@ -52,7 +53,9 @@ Future<MenuModel?> showUpdateMenuDialog(BuildContext context, MenuModel menu) {
                   price: priceController.text,
                   imageUrl: selectedImage?.path ?? menu.imageUrl,
                 );
+
                 Navigator.pop(context, updatedMenu);
+
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: const Row(
@@ -63,6 +66,11 @@ Future<MenuModel?> showUpdateMenuDialog(BuildContext context, MenuModel menu) {
                       ],
                     ),
                     backgroundColor: Colors.orange,
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    margin: const EdgeInsets.all(16),
                   ),
                 );
               }
@@ -247,10 +255,12 @@ Future<MenuModel?> showUpdateMenuDialog(BuildContext context, MenuModel menu) {
                         ),
                       ),
                       validator: (val) {
-                        if (val == null || val.isEmpty)
+                        if (val == null || val.isEmpty) {
                           return "Harga wajib diisi";
-                        if (int.tryParse(val) == null)
+                        }
+                        if (int.tryParse(val) == null) {
                           return "Harus berupa angka";
+                        }
                         return null;
                       },
                     ),

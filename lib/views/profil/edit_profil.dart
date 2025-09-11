@@ -133,16 +133,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 fillColor: Colors.grey.shade50,
                 hintText: "Masukkan nama baru",
                 hintStyle: const TextStyle(fontSize: 14, color: Colors.grey),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Colors.grey.shade200),
-                ),
+
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Colors.grey.shade200),
+                  borderSide: BorderSide(color: Colors.grey.shade300),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
+
                   borderSide: BorderSide(
                     color: Colors.orange.shade600,
                     width: 2,
@@ -167,7 +165,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ),
                 child: _isLoading
                     ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text("Simpan", style: TextStyle(fontSize: 16)),
+                    : const Text(
+                        "Simpan",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
               ),
             ),
           ],

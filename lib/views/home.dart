@@ -6,6 +6,7 @@ import 'package:tugas16_flutter/model/user_model.dart';
 import 'package:tugas16_flutter/views/menu/add_menu.dart';
 import 'package:tugas16_flutter/views/menu/detail_menu.dart';
 import 'package:tugas16_flutter/views/menu/menu_page.dart';
+import 'package:tugas16_flutter/widgets/section_title.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -24,9 +25,9 @@ class _HomeState extends State<Home> {
   int _current = 0;
 
   final List<String> imgList = [
-    'assets/images/carmen.jpg',
-    'assets/images/carmen.jpg',
-    'assets/images/carmen.jpg',
+    'assets/images/Screenshot 2025-09-12 040148.png',
+    'assets/images/Seblak7.png',
+    'assets/images/ayam_geprek.png',
   ];
 
   @override
@@ -79,36 +80,6 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget sectionTitle(
-    String title, {
-    Color lineColor = const Color(0xFFFF6B35),
-  }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      child: Row(
-        children: [
-          Container(
-            width: 4,
-            height: 24,
-            decoration: BoxDecoration(
-              color: lineColor,
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF2C2C2C),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -155,7 +126,7 @@ class _HomeState extends State<Home> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    "Hi, ${userData?.data?.name ?? ''}",
+                    "Hai, ${userData?.data?.name ?? ''}",
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -194,9 +165,9 @@ class _HomeState extends State<Home> {
         },
         child: ListView(
           children: [
-            // Penawaran Spesial Section Title
+            // Penawaran Spesial
             sectionTitle("Penawaran Spesial"),
-
+            SizedBox(height: 15),
             // Carousel
             CarouselSlider(
               options: CarouselOptions(

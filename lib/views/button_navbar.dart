@@ -35,12 +35,12 @@ class _ButtomNavbarState extends State<ButtomNavbar> {
           });
         },
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Beranda'),
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_month),
-            label: 'Reservasion',
+            label: 'Reservasi',
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.info), label: 'Tentang'),
+          BottomNavigationBarItem(icon: Icon(Icons.info), label: 'profil'),
         ],
       ),
     );

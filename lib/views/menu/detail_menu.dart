@@ -208,9 +208,11 @@ class _DetailMenuState extends State<DetailMenu> {
               : Container(
                   width: double.infinity,
                   height: 250,
-                  color: Colors.grey[300],
+                  color: Colors.orange[50],
 
-                  child: const Center(child: Text("No Image")),
+                  child: const Center(
+                    child: Icon(Icons.fastfood, size: 64, color: Colors.orange),
+                  ),
                 ),
 
           Expanded(
@@ -219,7 +221,7 @@ class _DetailMenuState extends State<DetailMenu> {
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Colors.orange.shade50,
+                  color: Colors.grey[100],
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(28),
                     topRight: Radius.circular(28),

@@ -87,7 +87,7 @@ class _MenuPageState extends State<MenuPage> {
                               )
                             : Container(
                                 width: double.infinity,
-                                color: Colors.grey[200],
+                                color: Colors.orange[50],
                                 child: const Center(
                                   child: Icon(
                                     Icons.fastfood,
@@ -180,7 +180,7 @@ class _MenuPageState extends State<MenuPage> {
                                 : Icons.favorite_border_rounded,
                             key: ValueKey(isLiked),
                             size: 18,
-                            color: isLiked ? Colors.orange : Colors.grey[600],
+                            color: isLiked ? Colors.orange : Colors.orange,
                           ),
                         ),
                       ),

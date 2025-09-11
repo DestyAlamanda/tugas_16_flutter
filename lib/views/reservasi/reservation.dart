@@ -129,7 +129,7 @@ class _ReservationPageState extends State<ReservationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.orange.shade50,
+      backgroundColor: Colors.grey[50],
       appBar: AppBar(
         title: const Text(
           "Reservasi Saya",
@@ -139,6 +139,8 @@ class _ReservationPageState extends State<ReservationPage> {
         backgroundColor: Colors.orange,
         foregroundColor: Colors.white,
       ),
+
+      //FAB
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.orange,
         child: const Icon(Icons.add_rounded, size: 28, color: Colors.white),
@@ -216,8 +218,8 @@ class _ReservationPageState extends State<ReservationPage> {
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.shade200,
-                      blurRadius: 8,
+                      color: Colors.grey,
+                      blurRadius: 2,
                       offset: const Offset(0, 2),
                     ),
                   ],
@@ -226,6 +228,7 @@ class _ReservationPageState extends State<ReservationPage> {
                   padding: const EdgeInsets.all(20),
                   child: Row(
                     children: [
+                      // icon calender
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
@@ -234,7 +237,7 @@ class _ReservationPageState extends State<ReservationPage> {
                         ),
                         child: Icon(
                           Icons.event_rounded,
-                          color: Colors.orange.shade600,
+                          color: Colors.orange,
                           size: 24,
                         ),
                       ),
@@ -274,6 +277,8 @@ class _ReservationPageState extends State<ReservationPage> {
                                 ),
                               ],
                             ),
+
+                            //catatan
                             if (r.notes.isNotEmpty) ...[
                               const SizedBox(height: 6),
                               Row(

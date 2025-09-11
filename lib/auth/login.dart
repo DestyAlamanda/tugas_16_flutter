@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tugas16_flutter/api/api_service.dart';
 import 'package:tugas16_flutter/auth/register_user.dart';
 import 'package:tugas16_flutter/model/register_model.dart';
-import 'package:tugas16_flutter/utils/shared_preference.dart';
 import 'package:tugas16_flutter/views/button_navbar.dart';
-// pastikan ada file ini
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -48,10 +46,6 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         user = result;
       });
-
-      // simpan token
-      PreferenceHandler.saveToken(user?.data?.token ?? "");
-      PreferenceHandler.saveLogin();
 
       if (!mounted) return;
 
@@ -107,27 +101,20 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: 40),
+              const SizedBox(height: 50),
               Center(
-                child: Container(
-                  width: 80,
+                child: Image.asset(
+                  "assets/images/logo_font1.png",
+                  width: 300,
                   height: 80,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF1A2A80),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Icon(
-                    Icons.school,
-                    color: Colors.white,
-                    size: 48,
-                  ),
+                  fit: BoxFit.contain,
                 ),
               ),
-              const SizedBox(height: 30),
+
               const Text(
                 "Selamat Datang",
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -139,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.grey),
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 40),
 
               // input email
               Text("Email", style: TextStyle(color: Colors.grey[800])),

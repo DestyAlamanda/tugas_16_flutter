@@ -122,8 +122,8 @@ class _AboutPageState extends State<AboutPage> {
                     children: [
                       _buildSetting(
                         Icons.person_outline_rounded,
-                        'Profile Settings',
-                        'Manage your account',
+                        'Pengaturan Profil',
+                        'Kelola akun Anda',
                         Colors.orange.shade600,
                         true,
                         onTap: () async {
@@ -145,16 +145,16 @@ class _AboutPageState extends State<AboutPage> {
                       _divider(),
                       _buildSetting(
                         Icons.info_outline_rounded,
-                        'App Information',
-                        'Version and about',
+                        'Informasi Aplikasi',
+                        'Versi dan Informasi',
                         Colors.blue.shade600,
                         false,
                       ),
                       _divider(),
                       _buildSetting(
                         Icons.logout_rounded,
-                        'Sign Out',
-                        'Sign out from account',
+                        'Keluar',
+                        'Keluar dari akun Anda',
                         Colors.red.shade600,
                         false,
                         onTap: () => LogOutButton.handleLogout(context),
@@ -170,7 +170,7 @@ class _AboutPageState extends State<AboutPage> {
                 child: Column(
                   children: [
                     Text(
-                      "Restaurant App",
+                      "GoReserve",
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,

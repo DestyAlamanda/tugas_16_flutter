@@ -65,7 +65,15 @@ class AddReservationDialog {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setState) => AlertDialog(
-          title: const Text("Tambah Reservasi"),
+          title: const Text(
+            "Buat Reservasi",
+            style: TextStyle(
+              color: Colors.orange,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
+          ),
+
           content: SingleChildScrollView(
             child: Form(
               key: formKey,

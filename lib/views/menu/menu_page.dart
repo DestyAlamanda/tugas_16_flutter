@@ -22,7 +22,12 @@ class _MenuPageState extends State<MenuPage> {
   @override
   Widget build(BuildContext context) {
     if (widget.menus.isEmpty) {
-      return const Center(child: Text("Belum ada menu tersedia"));
+      return const Center(
+        child: Text(
+          "Belum ada menu tersedia",
+          style: TextStyle(color: Colors.grey),
+        ),
+      );
     }
 
     return GridView.builder(

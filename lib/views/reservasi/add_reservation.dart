@@ -55,9 +55,9 @@ class AddReservationDialog {
       setState(() => loading = false);
 
       if (result == "success") {
-        Navigator.pop(context, true); // sukses
+        Navigator.pop(context, true);
       } else {
-        Navigator.pop(context, false); // gagal
+        Navigator.pop(context, false);
       }
     }
 

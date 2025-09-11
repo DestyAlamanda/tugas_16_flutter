@@ -3,6 +3,8 @@ import 'package:tugas16_flutter/api/api_service.dart';
 import 'package:tugas16_flutter/auth/logout.dart';
 import 'package:tugas16_flutter/model/user_model.dart';
 
+import 'edit_profil.dart'; // pastikan path sesuai foldermu
+
 class AboutPage extends StatefulWidget {
   const AboutPage({super.key});
 
@@ -36,59 +38,35 @@ class _AboutPageState extends State<AboutPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // Header Section with Profile
+              // Header Section
               SizedBox(
                 width: double.infinity,
-                // decoration: BoxDecoration(
-                //   gradient: LinearGradient(
-                //     begin: Alignment.topCenter,
-                //     end: Alignment.bottomCenter,
-                //     colors: [Colors.orange.shade600, Colors.orange.shade500],
-                //   ),
-                // ),
                 child: Column(
                   children: [
                     const SizedBox(height: 40),
-
                     // Profile Avatar
-                    Container(
-                      // decoration: BoxDecoration(
-                      //   shape: BoxShape.circle,
-                      //   border: Border.all(color: Colors.white, width: 4),
-                      //   boxShadow: [
-                      //     BoxShadow(
-                      //       color: Colors.black.withOpacity(0.1),
-                      //       blurRadius: 20,
-                      //       offset: const Offset(0, 8),
-                      //     ),
-                      //   ],
-                      // ),
-                      child: CircleAvatar(
-                        radius: 60,
-                        // backgroundColor: Colors.white,
-                        child: Container(
-                          width: 96,
-                          height: 96,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: LinearGradient(
-                              colors: [
-                                Colors.orange.shade400,
-                                Colors.orange.shade600,
-                              ],
-                            ),
+                    CircleAvatar(
+                      radius: 60,
+                      child: Container(
+                        width: 96,
+                        height: 96,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.orange.shade400,
+                              Colors.orange.shade600,
+                            ],
                           ),
-                          child: const Icon(
-                            Icons.person_rounded,
-                            size: 48,
-                            color: Colors.white,
-                          ),
+                        ),
+                        child: const Icon(
+                          Icons.person_rounded,
+                          size: 48,
+                          color: Colors.white,
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 20),
-
                     // User Info
                     Text(
                       userData?.data?.name ?? 'Loading...',
@@ -98,9 +76,7 @@ class _AboutPageState extends State<AboutPage> {
                         color: Colors.orange,
                       ),
                     ),
-
                     const SizedBox(height: 8),
-
                     Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 20,
@@ -122,7 +98,6 @@ class _AboutPageState extends State<AboutPage> {
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 40),
                   ],
                 ),
@@ -151,6 +126,21 @@ class _AboutPageState extends State<AboutPage> {
                         'Manage your account',
                         Colors.orange.shade600,
                         true,
+                        onTap: () async {
+                          if (userData?.data != null) {
+                            final updatedUser = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    EditProfilePage(user: userData!.data!),
+                              ),
+                            );
+
+                            if (updatedUser != null) {
+                              setState(() => userData!.data = updatedUser);
+                            }
+                          }
+                        },
                       ),
                       _divider(),
                       _buildSetting(
@@ -174,7 +164,7 @@ class _AboutPageState extends State<AboutPage> {
                 ),
               ),
 
-              // App Info Footer
+              // Footer
               Padding(
                 padding: const EdgeInsets.all(24),
                 child: Column(

@@ -39,7 +39,6 @@ class _HomeState extends State<Home> {
   void loadMenus() {
     setState(() {
       futureMenus = AuthenticationAPI.getMenus().then((menus) {
-        // selalu urut A-Z
         menus.sort(
           (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()),
         );
@@ -75,17 +74,45 @@ class _HomeState extends State<Home> {
             .toList();
       });
     }
-
-    // tetap urut A-Z setelah filter
     filteredMenus.sort(
       (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()),
+    );
+  }
+
+  Widget sectionTitle(
+    String title, {
+    Color lineColor = const Color(0xFFFF6B35),
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: Row(
+        children: [
+          Container(
+            width: 4,
+            height: 24,
+            decoration: BoxDecoration(
+              color: lineColor,
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF2C2C2C),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: Colors.grey.shade50,
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.orange,
         onPressed: () async {
@@ -94,129 +121,141 @@ class _HomeState extends State<Home> {
         },
         child: const Icon(Icons.add, color: Colors.white),
       ),
-      body: SafeArea(
-        child: RefreshIndicator(
-          onRefresh: () async {
-            await loadUserData();
-            loadMenus();
-          },
-          child: ListView(
-            children: [
-              // Header User
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 25,
-                  vertical: 20,
-                ),
-                child: Row(
-                  children: [
-                    const CircleAvatar(backgroundColor: Colors.grey),
-                    const SizedBox(width: 10),
-                    Text(
-                      "Hi, ${userData?.data?.name ?? ''}",
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        elevation: 0,
+        backgroundColor: Colors.orange,
+        toolbarHeight: 170,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                CircleAvatar(
+                  radius: 26,
+                  child: Container(
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.orange.shade400,
+                          Colors.orange.shade600,
+                        ],
                       ),
                     ),
-                  ],
-                ),
-              ),
-
-              // Section Title
-              const Padding(
-                padding: EdgeInsets.all(16),
-                child: Text(
-                  "Penawaran Spesial",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              ),
-
-              // Carousel
-              CarouselSlider(
-                options: CarouselOptions(
-                  height: 200,
-                  autoPlay: true,
-                  enlargeCenterPage: true,
-                  viewportFraction: 0.9,
-                  aspectRatio: 16 / 9,
-                  onPageChanged: (index, reason) {
-                    setState(() => _current = index);
-                  },
-                ),
-                items: imgList.map((item) {
-                  return ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Image.asset(
-                      item,
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                    ),
-                  );
-                }).toList(),
-              ),
-              const SizedBox(height: 10),
-
-              // Carousel Indicator
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: imgList.asMap().entries.map((entry) {
-                  return AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    width: _current == entry.key ? 32 : 8,
-                    height: 8,
-                    margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: _current == entry.key
-                          ? Colors.orange
-                          : Colors.grey.withOpacity(0.3),
-                    ),
-                  );
-                }).toList(),
-              ),
-
-              // Search bar (tanpa filter icon)
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: TextField(
-                  controller: searchController,
-                  onChanged: filterMenus,
-                  decoration: InputDecoration(
-                    hintText: "Cari menu...",
-                    prefixIcon: const Icon(Icons.search, color: Colors.orange),
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide.none,
+                    child: const Icon(
+                      Icons.person_rounded,
+                      size: 20,
+                      color: Colors.white,
                     ),
                   ),
                 ),
-              ),
-
-              // Section Title
-              const Padding(
-                padding: EdgeInsets.all(16),
-                child: Text(
-                  "Menu",
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    "Hi, ${userData?.data?.name ?? ''}",
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 17),
+            TextField(
+              controller: searchController,
+              onChanged: filterMenus,
+              decoration: InputDecoration(
+                hintText: "Cari menu...",
+                prefixIcon: const Icon(Icons.search, color: Colors.orange),
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
                 ),
               ),
+            ),
+          ],
+        ),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(30)),
+        ),
+      ),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await loadUserData();
+          loadMenus();
+        },
+        child: ListView(
+          children: [
+            // Penawaran Spesial Section Title
+            sectionTitle("Penawaran Spesial"),
 
-              // Menu List
-              MenuPage(
-                menus: filteredMenus,
-                onTapMenu: (menu) async {
-                  final result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => DetailMenu(menu: menu)),
-                  );
-                  if (result == true) loadMenus();
+            // Carousel
+            CarouselSlider(
+              options: CarouselOptions(
+                height: 200,
+                autoPlay: true,
+                enlargeCenterPage: true,
+                viewportFraction: 0.9,
+                aspectRatio: 16 / 9,
+                onPageChanged: (index, reason) {
+                  setState(() => _current = index);
                 },
               ),
-            ],
-          ),
+              items: imgList.map((item) {
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.asset(
+                    item,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                  ),
+                );
+              }).toList(),
+            ),
+            const SizedBox(height: 10),
+
+            // Carousel Indicator
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: imgList.asMap().entries.map((entry) {
+                return AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  width: _current == entry.key ? 32 : 8,
+                  height: 8,
+                  margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: _current == entry.key
+                        ? Colors.orange
+                        : Colors.grey.withOpacity(0.3),
+                  ),
+                );
+              }).toList(),
+            ),
+
+            // Menu Pilihan Section Title
+            sectionTitle("Menu Pilihan"),
+
+            // Menu List
+            MenuPage(
+              menus: filteredMenus,
+              onTapMenu: (menu) async {
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => DetailMenu(menu: menu)),
+                );
+                if (result == true) loadMenus();
+              },
+            ),
+          ],
         ),
       ),
     );

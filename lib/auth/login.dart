@@ -142,13 +142,14 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 32),
 
               // input email
-              const Text("Email", style: TextStyle(color: Colors.grey)),
+              Text("Email", style: TextStyle(color: Colors.grey[800])),
               const SizedBox(height: 8),
               TextField(
                 controller: emailController,
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                   hintText: "Masukkan email",
+                  hintStyle: const TextStyle(fontSize: 16, color: Colors.grey),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
@@ -157,13 +158,14 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 20),
 
               // input password
-              const Text("Kata Sandi", style: TextStyle(color: Colors.grey)),
+              Text("Kata Sandi", style: TextStyle(color: Colors.grey[800])),
               const SizedBox(height: 8),
               TextField(
                 controller: passwordController,
                 obscureText: !isPasswordVisible,
                 decoration: InputDecoration(
                   hintText: "Masukkan kata sandi",
+                  hintStyle: const TextStyle(fontSize: 16, color: Colors.grey),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
@@ -192,7 +194,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     loginUser();
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF1A2A80),
+                    backgroundColor: Colors.orange,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -225,7 +227,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: const Text(
                       "Daftar",
                       style: TextStyle(
-                        color: Color(0xFF1A2A80),
+                        color: Colors.orange,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

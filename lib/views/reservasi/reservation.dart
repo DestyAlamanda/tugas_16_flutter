@@ -129,12 +129,13 @@ class _ReservationPageState extends State<ReservationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+      backgroundColor: Colors.orange.shade50,
       appBar: AppBar(
         title: const Text(
           "Reservasi Saya",
           style: TextStyle(fontWeight: FontWeight.w600, fontSize: 22),
         ),
+        centerTitle: true,
         backgroundColor: Colors.orange,
         foregroundColor: Colors.white,
       ),
@@ -169,7 +170,7 @@ class _ReservationPageState extends State<ReservationPage> {
                     Container(
                       padding: const EdgeInsets.all(24),
                       decoration: BoxDecoration(
-                        color: Colors.orange.shade50,
+                        color: Colors.orange.shade100,
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Icon(

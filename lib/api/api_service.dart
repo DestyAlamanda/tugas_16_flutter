@@ -54,12 +54,7 @@ class AuthenticationAPI {
   }
 
   // update profile
-  static Future<GetUserModel> updateUser(
-    String text,
-    String s,
-    param2, {
-    required String name,
-  }) async {
+  static Future<GetUserModel> updateUser({required String name}) async {
     final url = Uri.parse(Endpoint.profile);
     final token = await PreferenceHandler.getToken();
 

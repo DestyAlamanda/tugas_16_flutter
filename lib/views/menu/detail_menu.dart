@@ -29,7 +29,12 @@ class _DetailMenuState extends State<DetailMenu> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Detail Menu"),
+        title: const Text(
+          "Detail Menu",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.orange,
         actions: [
           PopupMenuButton<MenuItem>(
             onSelected: (value) async {
@@ -191,7 +196,7 @@ class _DetailMenuState extends State<DetailMenu> {
                     ? Image.network(
                         currentMenu.imageUrl!,
                         width: double.infinity,
-                        height: 300, // atur tinggi sesuai kebutuhan
+                        height: 280,
                         fit: BoxFit.fitWidth, // gambar menyesuaikan lebar
                       )
                     : Image.file(
@@ -204,17 +209,17 @@ class _DetailMenuState extends State<DetailMenu> {
                   width: double.infinity,
                   height: 250,
                   color: Colors.grey[300],
+
                   child: const Center(child: Text("No Image")),
                 ),
 
-          // Bagian Container Putih
           Expanded(
             child: Transform.translate(
               offset: const Offset(0, -20),
               child: Container(
                 width: double.infinity,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
+                decoration: BoxDecoration(
+                  color: Colors.orange.shade50,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(28),
                     topRight: Radius.circular(28),
@@ -255,15 +260,15 @@ class _DetailMenuState extends State<DetailMenu> {
                       Text(
                         currentMenu.name,
                         style: const TextStyle(
-                          fontSize: 24,
+                          fontSize: 28,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 10),
                       const Text(
                         "Description",
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

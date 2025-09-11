@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tugas16_flutter/views/home.dart';
-import 'package:tugas16_flutter/views/profil/about.dart';
+import 'package:tugas16_flutter/views/profil/profile.dart';
 import 'package:tugas16_flutter/views/reservasi/reservation.dart';
 
 class ButtomNavbar extends StatefulWidget {

@@ -134,19 +134,17 @@ class _RegisterPageState extends State<RegisterPage> {
                 const SizedBox(height: 25),
 
                 // Nama Lengkap
-                const Text(
-                  'Nama Lengkap',
-                  style: TextStyle(
-                    color: Color(0xff888888),
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
+                Text('Nama Lengkap', style: TextStyle(color: Colors.grey[800])),
                 const SizedBox(height: 10),
                 TextFormField(
                   controller: nameController,
                   keyboardType: TextInputType.name,
                   decoration: InputDecoration(
+                    hintText: "Masukkan nama lengkap",
+                    hintStyle: const TextStyle(
+                      fontSize: 15,
+                      color: Colors.grey,
+                    ),
                     contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -164,19 +162,17 @@ class _RegisterPageState extends State<RegisterPage> {
                 const SizedBox(height: 20),
 
                 // Email
-                const Text(
-                  'Email',
-                  style: TextStyle(
-                    color: Color(0xff888888),
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
+                Text('Email', style: TextStyle(color: Colors.grey[800])),
                 const SizedBox(height: 10),
                 TextFormField(
                   controller: emailController,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
+                    hintText: "Masukkan nama email",
+                    hintStyle: const TextStyle(
+                      fontSize: 15,
+                      color: Colors.grey,
+                    ),
                     contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -196,19 +192,17 @@ class _RegisterPageState extends State<RegisterPage> {
                 const SizedBox(height: 20),
 
                 // Kata Sandi
-                const Text(
-                  'Kata Sandi',
-                  style: TextStyle(
-                    color: Color(0xff888888),
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
+                Text('Kata Sandi', style: TextStyle(color: Colors.grey[800])),
                 const SizedBox(height: 10),
                 TextFormField(
                   controller: passwordController,
                   obscureText: !_isPasswordVisible,
                   decoration: InputDecoration(
+                    hintText: "Masukkan kata sandi",
+                    hintStyle: const TextStyle(
+                      fontSize: 15,
+                      color: Colors.grey,
+                    ),
                     contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -239,19 +233,20 @@ class _RegisterPageState extends State<RegisterPage> {
                 const SizedBox(height: 20),
 
                 // Konfirmasi Kata Sandi
-                const Text(
+                Text(
                   'Konfirmasi Kata Sandi',
-                  style: TextStyle(
-                    color: Color(0xff888888),
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                  ),
+                  style: TextStyle(color: Colors.grey[800]),
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: confirmPasswordController,
                   obscureText: !_isConfirmPasswordVisible,
                   decoration: InputDecoration(
+                    hintText: "Konfirmasi kata sandi",
+                    hintStyle: const TextStyle(
+                      fontSize: 15,
+                      color: Colors.grey,
+                    ),
                     contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -291,7 +286,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       registerUser();
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF1A2A80),
+                      backgroundColor: Colors.orange,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(6),
                       ),
@@ -328,7 +323,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           TextSpan(
                             text: 'Masuk',
                             style: TextStyle(
-                              color: Color(0xFF1A2A80),
+                              color: Colors.orange,
                               fontWeight: FontWeight.w700,
                               fontSize: 12,
                             ),

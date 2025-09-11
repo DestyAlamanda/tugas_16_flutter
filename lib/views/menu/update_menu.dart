@@ -94,6 +94,7 @@ Future<MenuModel?> showUpdateMenuDialog(BuildContext context, MenuModel menu) {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
+                        color: Colors.orange,
                       ),
                     ),
                     const SizedBox(height: 16),
